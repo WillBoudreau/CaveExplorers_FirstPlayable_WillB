@@ -148,21 +148,25 @@ namespace CaveExplorers_FirstPlayable__WillB
         {
             Console.Clear();
             Console.WriteLine("Welcome to stage " + stage);
-            while (Collectables < 3)
+            while (Collectables < 3 && playerHealth > 0)
             {
                 Map();
                 ShowHUD();
                 Console.Write("\n");
                 Legend();
                 PlayerPOS();
-                MimicPlacement();
-                Mimic();
+                //MimicPlacement();
+                //Mimic();
                 UserInput();
                 Mimic();
             }
             if (Collectables >= 3)
             {
                 Win();
+            }
+            else
+            {
+                gameOver();
             }
         }
         static void Map()
@@ -224,7 +228,7 @@ namespace CaveExplorers_FirstPlayable__WillB
                 if (MimicMove == 1)
                 {
                     mimicmoveY = Math.Max(MimicPOSy - 1, 0);
-                    if (arrayChar[mimicmoveY, MimicPOSx] == '-' || arrayChar[mimicmoveY, MimicPOSx] == '|' || arrayChar[mimicmoveY, MimicPOSx] == '^')
+                    if (arrayChar[mimicmoveY, MimicPOSx] == '#')
                     {
                         mimicmoveY = MimicPOSy;
                         MimicPOSy = mimicmoveY;
@@ -263,7 +267,7 @@ namespace CaveExplorers_FirstPlayable__WillB
                 if (MimicMove == 2)
                 {
                     mimicmoveX = Math.Max(MimicPOSx - 1, 0);
-                    if (arrayChar[mimicmoveX, MimicPOSy] == '-' || arrayChar[mimicmoveX, MimicPOSy] == '|' || arrayChar[mimicmoveX, MimicPOSy] == '^')
+                    if (arrayChar[mimicmoveX, MimicPOSy] == '#')
                     {
                         mimicmoveX = MimicPOSx;
                         MimicPOSx = mimicmoveX;
@@ -301,7 +305,7 @@ namespace CaveExplorers_FirstPlayable__WillB
                 {
 
                     mimicmoveY = Math.Max(MimicPOSy + 1, 0);
-                    if (arrayChar[mimicmoveY, MimicPOSx] == '-' || arrayChar[mimicmoveY, MimicPOSx] == '|' || arrayChar[mimicmoveY, MimicPOSx] == '^')
+                    if (arrayChar[mimicmoveY, MimicPOSx] == '#')
                     {
                         mimicmoveY = MimicPOSy;
                         MimicPOSy = mimicmoveY;
@@ -341,7 +345,7 @@ namespace CaveExplorers_FirstPlayable__WillB
                 {
                     mimicmoveX = Math.Max(MimicPOSx + 1, 0);
 
-                    if (arrayChar[mimicmoveX, MimicPOSy] == '-' || arrayChar[mimicmoveX, MimicPOSy] == '|' || arrayChar[mimicmoveX, MimicPOSy] == '^')
+                    if (arrayChar[mimicmoveX, MimicPOSy] == '#')
                     {
                         mimicmoveX = MimicPOSx;
                         MimicPOSx = mimicmoveX;
@@ -397,12 +401,13 @@ namespace CaveExplorers_FirstPlayable__WillB
                 //Player pushes W
                 if (playerControl.Key == ConsoleKey.W)
                 {
-                    moveY = Math.Max(playerPOSy - 1, 0);
-                    if (arrayChar[moveY, playerPOSx] == '-' || arrayChar[moveY, playerPOSx] == '|' || arrayChar[moveY, playerPOSx] == '^')
+                    moveY = Math.Max(playerPOSy - 2, 0);
+                    if (arrayChar[moveY, playerPOSx] == '#')
                     {
                         moveY = playerPOSy;
-                        playerPOSy = moveY;
+                        playerPOSy = moveY; 
                         Playerturn = false;
+                       
                         return;
 
                     }
@@ -495,7 +500,7 @@ namespace CaveExplorers_FirstPlayable__WillB
                         Playerturn = false;
                     }
 
-                    if (arrayChar[playerPOSy, moveX] == '|' || arrayChar[playerPOSy, moveX] == '-')
+                    if (arrayChar[playerPOSy, moveX] == '#')
                     {
                         moveX = playerPOSx;
                         playerPOSx = moveX;
@@ -521,8 +526,8 @@ namespace CaveExplorers_FirstPlayable__WillB
                 if (playerControl.Key == ConsoleKey.S)
                 {
 
-                    moveY = Math.Max(playerPOSy + 1, 0);
-                    if (arrayChar[moveY, playerPOSx] == '-' || arrayChar[moveY, playerPOSx] == '|' || arrayChar[moveY, playerPOSx] == '^')
+                    moveY = Math.Max(playerPOSy, 0);
+                    if (arrayChar[moveY, playerPOSx] == '#')
                     {
                         moveY = playerPOSy;
                         playerPOSy = moveY;
@@ -620,7 +625,7 @@ namespace CaveExplorers_FirstPlayable__WillB
                             Playerturn = false;
                         }
 
-                        if (arrayChar[playerPOSy, moveX] == '|' || arrayChar[playerPOSy, moveX] == '-')
+                        if (arrayChar[playerPOSy, moveX] == '#')
                         {
                             moveX = playerPOSx;
                             playerPOSx = moveX;
@@ -653,7 +658,7 @@ namespace CaveExplorers_FirstPlayable__WillB
             //Draws Player and sets them in the start position
             Console.SetCursorPosition(playerPOSx, playerPOSy);
             Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.Write("&");
+            Console.Write("$");
             Console.ResetColor();
         }
         static void MimicPlacement()
@@ -661,7 +666,7 @@ namespace CaveExplorers_FirstPlayable__WillB
             //Draws out the Mimic
             Console.SetCursorPosition(MimicPOSx, MimicPOSy);
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write("#");
+            Console.Write("@");
             Console.ResetColor();
         }
         static void Collect()
