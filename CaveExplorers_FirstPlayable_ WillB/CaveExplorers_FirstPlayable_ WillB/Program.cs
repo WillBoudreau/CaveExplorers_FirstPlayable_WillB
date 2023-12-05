@@ -684,6 +684,7 @@ namespace CaveExplorers_FirstPlayable__WillB
             Console.WriteLine("Game Over");
             Thread.Sleep(milliseconds);
             Console.WriteLine("Press any key to restart");
+            Console.ResetColor();
             Console.ReadKey();
             Main();
         }
