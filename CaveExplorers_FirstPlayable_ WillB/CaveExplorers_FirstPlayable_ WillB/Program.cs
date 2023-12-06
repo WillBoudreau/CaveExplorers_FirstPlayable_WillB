@@ -250,6 +250,9 @@ namespace CaveExplorers_FirstPlayable__WillB
             MimicPOS = rnd.Next(1, 5);
             while (Playerturn == false)
             {
+                turn = "Mimic turn";
+                MaxMimicPOSx = arrayChar.GetLength(0) - 1;
+                MaxMimicPOSy = arrayChar.GetLength(1) - 1;
                 if (MimicPOS == 1)
                 {
                     MimicMoveY = Math.Max(MimicPOSy - 2, 0);
@@ -514,48 +517,319 @@ namespace CaveExplorers_FirstPlayable__WillB
         {
            
         }
-        static char TileCheck(int x, int y)
-        {
-            char[,] tempArrayChar = arrayChar;
-            return tempArrayChar[x,y];
-        }
-        //Player Movement
-        static void UserInput()
-        {
-
-            //Takes user input
-            int moveX;
-            int moveY;
-
-            int newPlayerPOSx = playerPOSx;
-            int newPlayerPOSy = playerPOSy;
-            ConsoleKeyInfo Input = Console.ReadKey();
-            switch (Input.KeyChar)
+            //Player Movement
+            static void UserInput()
             {
-                case 'w':
-                    playerPOSy--;
-                    if(TileCheck(playerPOSx,playerPOSy) == '#')
-                    {
-                        playerPOSy++;
-                    }
-                    break;
-                case 'a':
-                    playerPOSx--;
-                    break;
-                case 's':
-                    playerPOSy++;
-                    break;
-                case 'd':
-                    playerPOSx++;
-                    break;
 
+                //Takes user input
+                int moveX;
+                int moveY;
+
+                int newPlayerPOSx = playerPOSx;
+                int newPlayerPOSy = playerPOSy;
+
+
+                while (Playerturn == true)
+                {
+                    turn = "Player turn";
+                    playerControl = Console.ReadKey(true);
+                    //Player pushes W
+                    if (playerControl.Key == ConsoleKey.W)
+                    {
+                        moveY = Math.Max(playerPOSy - 2, 0);
+                        if (arrayChar[moveY, playerPOSx] == '#')
+                        {
+                            PlayerInWater = false;
+                            moveY = playerPOSy;
+                            playerPOSy = moveY;
+                            Playerturn = false;
+                            return;
+
+                        }
+                        if (arrayChar[moveY, playerPOSx] == '+')
+                        {
+                            PlayerInWater = false;
+                            playerHealth -= 1;
+                            playerPOSy--;
+                            if (playerHealth <= 0)
+                            {
+                                gameOver();
+                            }
+                            Playerturn = false;
+                            return;
+                        }
+                        if (arrayChar[moveY, playerPOSx] == '~')
+                        {
+                            PlayerInWater = true;
+                            while (PlayerInWater == true)
+                            {
+                                playerDamage = playerDamage / 2;
+                            }
+                            playerPOSy--;
+                            Playerturn = false;
+                            return;
+                        }
+                        if (arrayChar[moveY, playerPOSx] == '*')
+                        {
+                            Console.Write("You got Gold!");
+                            Collect();
+                            playerPOSy--;
+                            Playerturn = false;
+                            return;
+                        }
+                        if (moveY == MimicPOSy && playerPOSx == MimicPOSx)
+                        {
+                            enemyHealth -= playerDamage;
+                            if (enemyHealth <= 0)
+                            {
+                                enemyHealth = 0;
+                                MimicPOSx = 0;
+                                MimicPOSy = 0;
+
+                            }
+                            Playerturn = false;
+                            return;
+                        }
+
+                        else
+                        {
+                            PlayerInWater = false;
+                            Playeraction = "Player moved up";
+                            playerPOSy--;
+                            Playerturn = false;
+                            return;
+                        }
+
+                    }
+                    //Player Pushes A
+                    if (playerControl.Key == ConsoleKey.A)
+                    {
+                        moveX = Math.Max(playerPOSx - 1, 0);
+
+                        if (moveX <= 0)
+                        {
+                            moveX = 0;
+                            Playerturn = false;
+                        }
+                        if (moveX == MimicPOSx && playerPOSy == MimicPOSy)
+                        {
+                            enemyHealth -= playerDamage;
+                            if (enemyHealth <= 0)
+                            {
+                                MimicPOSx = 0;
+                                MimicPOSx = 0;
+                            }
+                            Playerturn = false;
+                            return;
+                        }
+
+                        if (arrayChar[playerPOSy, moveX] == '+')
+                        {
+                            PlayerInWater = false;
+                            playerHealth -= 1;
+                            playerPOSx--;
+                            if (playerHealth <= 0)
+                            {
+                                gameOver();
+                            }
+                            Playerturn = false;
+                            return;
+                        }
+                        if (arrayChar[moveX, playerPOSy] == '*')
+                        {
+                            Console.Write("You got Gold!");
+                            Collect();
+                            playerPOSx--;
+                            Playerturn = false;
+                            return;
+                        }
+                    if (arrayChar[moveX, playerPOSx] == '~')
+                    {
+                        PlayerInWater = true;
+                        while(PlayerInWater == true)
+                        {
+                            playerDamage = playerDamage / 2;
+                        }
+                        playerPOSx--;
+                        Playerturn = false;
+                        return;
+                    }
+
+                    if (arrayChar[playerPOSy, moveX] == '#')
+                    {
+                        PlayerInWater = false;
+                        moveX = playerPOSx;
+                        playerPOSx = moveX;
+                        Playeraction = "Player hit a wall";
+                        Playerturn = false;
+                        return;
+                    }
+                    else
+                    {
+                        PlayerInWater = false;
+                        playerPOSx--;
+                        Playerturn = false;
+                        return;
+                    }
+
+
+                    }
+
+                    //Player pushes S 
+                    if (playerControl.Key == ConsoleKey.S)
+                    {
+
+                        moveY = Math.Max(playerPOSy + 1, 0);
+                        if (arrayChar[moveY, playerPOSx] == '#')
+                        {
+                            PlayerInWater = false;
+                            moveY = playerPOSy;
+                            playerPOSy = moveY;
+                            Playerturn = false;
+                            return;
+                        }
+                        if (arrayChar[moveY, playerPOSx] == '+')
+                        {
+                            PlayerInWater = false;
+                            playerHealth -= 1;
+                            if (playerHealth <= 0)
+                            {
+                                gameOver();
+                            }
+                            playerPOSy++;
+                            Playerturn = false;
+                            return;
+                        }
+                        if (arrayChar[moveY, playerPOSx] == '~')
+                        {
+                            PlayerInWater = true;
+                            while(PlayerInWater == true)
+                            {
+                                playerDamage = playerDamage / 2;
+                            }
+                            playerPOSy++;
+                            Playerturn = false;
+                            return;
+                        }
+                        if (arrayChar[moveY, playerPOSx] == '*')
+                        {
+                            Console.Write("You got Gold!");
+                            arrayChar[moveY, playerPOSx] = '.';
+                            Collect();
+                            playerPOSy++;
+                            Playerturn = false;
+                        }
+                        if (moveY == MimicPOSy && playerPOSx == MimicPOSx)
+                        {
+                            enemyHealth -= playerDamage;
+                            if (enemyHealth <= 0)
+                            {
+                                enemyHealth = 0;
+                                MimicPOSx = 0;
+                                MimicPOSy = 0;
+
+                            }
+                            Playerturn = false;
+                            return;
+                        }
+                        if (moveY <= 0)
+                        {
+                            moveY = 0;
+                            Playerturn = false;
+                            return;
+                        }
+                        else
+                        {
+                            PlayerInWater = false;
+                            playerPOSy++;
+                            Playeraction = "Player Moved down";
+                            Playerturn = false;
+                            return;
+                        }
+
+                    }
+                    //Player pushes D
+                    {
+                        if (playerControl.Key == ConsoleKey.D)
+                        {
+                            moveX = Math.Max(playerPOSx + 1, 0);
+
+                            if (moveX <= 0)
+                            {
+                                moveX = 0;
+                                Playerturn = false;
+                                return;
+                            }
+                            if (moveX == MimicPOSx && playerPOSy == MimicPOSy)
+                            {
+                                enemyHealth -= playerDamage;
+                                if (enemyHealth <= 0)
+                                {
+                                    MimicPOSx = 0;
+                                    MimicPOSx = 0;
+                                }
+                                Playerturn = false;
+                                return;
+                            }
+
+                            if (arrayChar[playerPOSy, moveX] == '+')
+                            {
+                                playerHealth -= 1;
+                                playerPOSx++;
+                                if (playerHealth <= 0)
+                                {
+                                    gameOver();
+                                }
+                                Playerturn = false;
+                                return;
+                            }
+                            if (arrayChar[playerPOSy, moveX] == '*')
+                            {
+                                Console.Write("You got Gold!");
+                                arrayChar[playerPOSy, moveX] = '.';
+                                Collect();
+                                playerPOSx++;
+                                Playerturn = false;
+                                return;
+                            }
+                        if (arrayChar[playerPOSy,moveX] == '~')
+                        {
+                            PlayerInWater = true;
+                            while(PlayerInWater == true) 
+                            {
+                                playerDamage = playerDamage / 2;
+                            }
+                            playerPOSx++;
+                            Playerturn = false;
+                            return;
+                        }
+
+                        if (arrayChar[playerPOSy, moveX] == '#')
+                        {
+                            PlayerInWater = false;
+                            moveX = playerPOSx;
+                            playerPOSx = moveX;
+                            Playerturn = false;
+                            return;
+                        }
+                        else
+                        {
+                            PlayerInWater = false;
+                            Playeraction = "Player moved right";
+                            playerPOSx++;
+                            return;
+                        }   
+
+
+                        }
+                    }
+                    Console.Clear();
+                }
             }
 
-        }
+            //Placements of NPC's and Player
 
-        //Placements of NPC's and Player
-
-        static void PlayerPOS()
+            static void PlayerPOS()
             {
                 //Draws Player and sets them in the start position
                 Console.SetCursorPosition(playerPOSx, playerPOSy);
@@ -579,7 +853,7 @@ namespace CaveExplorers_FirstPlayable__WillB
             Console.Write("G");
             Console.ResetColor();
         }
-        static void Collect()
+            static void Collect()
             {
                 arrayChar[playerPOSx, playerPOSy] = '.';
                 Collectables++;
@@ -590,9 +864,9 @@ namespace CaveExplorers_FirstPlayable__WillB
                 }
             }
 
-        //End game method
+            //End game method
 
-        static void gameOver()
+            static void gameOver()
             {
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Red;
@@ -603,7 +877,7 @@ namespace CaveExplorers_FirstPlayable__WillB
                 Console.ReadKey();
                 Main();
             }
-        static void Win()
+            static void Win()
             {
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Blue;
