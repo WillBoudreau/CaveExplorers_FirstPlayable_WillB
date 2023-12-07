@@ -20,8 +20,8 @@ namespace CaveExplorers_FirstPlayable__WillB
         //Mimic
         static int MimicPOSx = 5;
         static int MimicPOSy = 5;
-        static int MaxMimicPOSx;
-        static int MaxMimicPOSy;
+        static int MaxPOSx;
+        static int MaxPOSy;
         static int enemyDamage = 2;
         static int enemyHealth = 10;
         //Collectables
@@ -36,6 +36,7 @@ namespace CaveExplorers_FirstPlayable__WillB
         static int GruntDamage = 5;
         static int GruntPOSy = 15;
         static int GruntPOSx = 15;
+        static int GruntPOS;
         //string variables
         //Player
         static string userName;
@@ -56,6 +57,7 @@ namespace CaveExplorers_FirstPlayable__WillB
         static bool Playerturn = true;
         static bool MimicDeath = false;
         static bool GruntDeath = false;
+        static bool GameDone = false;
         //Enemy
         static bool EnemyInWater = false;
         //Player
@@ -140,10 +142,8 @@ namespace CaveExplorers_FirstPlayable__WillB
         }
         static void UpdateLog()
         {
-            Console.Clear();
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write("Turn " + TurnCount +"|"+ Playeraction +"\n" + Mimicaction + "\n" +Gruntaction);
-            Console.WriteLine("Turn " + turn);
+            Console.Write("Turn " + TurnCount + "|" + Playeraction + "\n" + Mimicaction + "\n" + Gruntaction);
             Console.ResetColor();
             TurnCount++;
         }
@@ -176,18 +176,21 @@ namespace CaveExplorers_FirstPlayable__WillB
         {
             Console.Clear();
             Console.WriteLine("Welcome to stage " + stage);
-            while (Collectables < 3 && playerHealth > 0)
+            while (GameDone == false)
             {
                 Map();
                 ShowHUD();
                 Console.Write("\n");
                 Legend();
+                Console.Write('\n');
+                UpdateLog();
                 PlayerPOS();
                 MimicPlacement();
                 GruntPlacement();
                 Mimic();
                 UserInput();
                 Mimic();
+                Console.Clear();
             }
             if (Collectables >= 3)
             {
@@ -200,8 +203,7 @@ namespace CaveExplorers_FirstPlayable__WillB
         }
         static void Map()
         {
-            Console.Clear();
-            UpdateLog();
+            
             // while loop shows off the map
             int current = 0;
             arrayString = File.ReadAllLines(path);
@@ -251,20 +253,20 @@ namespace CaveExplorers_FirstPlayable__WillB
             while (Playerturn == false)
             {
                 turn = "Mimic turn";
-                MaxMimicPOSx = arrayChar.GetLength(0) - 1;
-                MaxMimicPOSy = arrayChar.GetLength(1) - 1;
+                MaxPOSx = 1;
+                MaxPOSy = 2;
                 if (MimicPOS == 1)
                 {
-                    MimicMoveY = Math.Max(MimicPOSy - 2, 0);
+                    MimicMoveY = MimicPOSy - MaxPOSy;
                     if (arrayChar[MimicMoveY, MimicPOSx] == '#')
                     {
                         EnemyInWater = false;
                         enemyDamage = 2;
                         MimicMoveY = MimicPOSy;
                         MimicPOSy = MimicMoveY;
-                        if(MimicPOSy > MaxMimicPOSy)
+                        if(MimicPOSy > MaxPOSy)
                         {
-                            MimicPOSy = MaxMimicPOSy;
+                            MimicPOSy = MaxPOSy;
                         }
                         Mimicaction = "Mimic moved to a wall";
                         Playerturn = true;
@@ -515,10 +517,14 @@ namespace CaveExplorers_FirstPlayable__WillB
         }
         static void Grunt()
         {
-           
+            GruntPOS = rnd.Next(1, 2);
+            if(GruntPOS == 1 )
+            {
+                
+            }
         }
-            //Player Movement
-            static void UserInput()
+        //Player Movement
+        static void UserInput()
             {
 
                 //Takes user input
@@ -533,15 +539,17 @@ namespace CaveExplorers_FirstPlayable__WillB
                 {
                     turn = "Player turn";
                     playerControl = Console.ReadKey(true);
+                    MaxPOSx = 1;
+                    MaxPOSy = 1;
                     //Player pushes W
                     if (playerControl.Key == ConsoleKey.W)
                     {
-                        moveY = Math.Max(playerPOSy - 2, 0);
+                        moveY = Math.Max(playerPOSy - 1,0);
                         if (arrayChar[moveY, playerPOSx] == '#')
                         {
                             PlayerInWater = false;
+                            playerPOSy--;
                             moveY = playerPOSy;
-                            playerPOSy = moveY;
                             Playerturn = false;
                             return;
 
@@ -604,8 +612,7 @@ namespace CaveExplorers_FirstPlayable__WillB
                     //Player Pushes A
                     if (playerControl.Key == ConsoleKey.A)
                     {
-                        moveX = Math.Max(playerPOSx - 1, 0);
-
+                        moveX = Math.Max(playerPOSx - 1, 0);          
                         if (moveX <= 0)
                         {
                             moveX = 0;
@@ -626,6 +633,7 @@ namespace CaveExplorers_FirstPlayable__WillB
                         if (arrayChar[playerPOSy, moveX] == '+')
                         {
                             PlayerInWater = false;
+                            Playeraction = "Player on a spike trap";
                             playerHealth -= 1;
                             playerPOSx--;
                             if (playerHealth <= 0)
@@ -635,14 +643,14 @@ namespace CaveExplorers_FirstPlayable__WillB
                             Playerturn = false;
                             return;
                         }
-                        if (arrayChar[moveX, playerPOSy] == '*')
-                        {
-                            Console.Write("You got Gold!");
-                            Collect();
-                            playerPOSx--;
-                            Playerturn = false;
-                            return;
-                        }
+                        //if (arrayChar[moveX, playerPOSy] == '*')
+                        //{
+                        //    Console.Write("You got Gold!");
+                        //    Collect();
+                        //    playerPOSx--;
+                        //    Playerturn = false;
+                        //    return;
+                        //}
                     if (arrayChar[moveX, playerPOSx] == '~')
                     {
                         PlayerInWater = true;
@@ -667,6 +675,7 @@ namespace CaveExplorers_FirstPlayable__WillB
                     else
                     {
                         PlayerInWater = false;
+                        Playeraction = "Player moved Left";
                         playerPOSx--;
                         Playerturn = false;
                         return;
@@ -678,8 +687,7 @@ namespace CaveExplorers_FirstPlayable__WillB
                     //Player pushes S 
                     if (playerControl.Key == ConsoleKey.S)
                     {
-
-                        moveY = Math.Max(playerPOSy + 1, 0);
+                    moveY = Math.Max(playerPOSy + 1, 0);
                         if (arrayChar[moveY, playerPOSx] == '#')
                         {
                             PlayerInWater = false;
@@ -711,14 +719,14 @@ namespace CaveExplorers_FirstPlayable__WillB
                             Playerturn = false;
                             return;
                         }
-                        if (arrayChar[moveY, playerPOSx] == '*')
-                        {
-                            Console.Write("You got Gold!");
-                            arrayChar[moveY, playerPOSx] = '.';
-                            Collect();
-                            playerPOSy++;
-                            Playerturn = false;
-                        }
+                        //if (arrayChar[moveY, playerPOSx] == '*')
+                        //{
+                        //    Console.Write("You got Gold!");
+                        //    arrayChar[moveY, playerPOSx] = '.';
+                        //    Collect();
+                        //    playerPOSy++;
+                        //    Playerturn = false;
+                        //}
                         if (moveY == MimicPOSy && playerPOSx == MimicPOSx)
                         {
                             enemyHealth -= playerDamage;
@@ -741,8 +749,8 @@ namespace CaveExplorers_FirstPlayable__WillB
                         else
                         {
                             PlayerInWater = false;
-                            playerPOSy++;
                             Playeraction = "Player Moved down";
+                            playerPOSy++;
                             Playerturn = false;
                             return;
                         }
@@ -827,9 +835,9 @@ namespace CaveExplorers_FirstPlayable__WillB
                 }
             }
 
-            //Placements of NPC's and Player
+        //Placements of NPC's and Player
 
-            static void PlayerPOS()
+        static void PlayerPOS()
             {
                 //Draws Player and sets them in the start position
                 Console.SetCursorPosition(playerPOSx, playerPOSy);
@@ -853,7 +861,7 @@ namespace CaveExplorers_FirstPlayable__WillB
             Console.Write("G");
             Console.ResetColor();
         }
-            static void Collect()
+        static void Collect()
             {
                 arrayChar[playerPOSx, playerPOSy] = '.';
                 Collectables++;
@@ -864,9 +872,9 @@ namespace CaveExplorers_FirstPlayable__WillB
                 }
             }
 
-            //End game method
+        //End game method
 
-            static void gameOver()
+        static void gameOver()
             {
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Red;
@@ -877,7 +885,7 @@ namespace CaveExplorers_FirstPlayable__WillB
                 Console.ReadKey();
                 Main();
             }
-            static void Win()
+        static void Win()
             {
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Blue;
