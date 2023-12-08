@@ -64,10 +64,7 @@ namespace CaveExplorers2_WillB
         static int Collect5Y;
         static void Main()
         {
-            Console.Write("Welcome brave adventurer! You are a brave explorer tasked with slaying the Enemy's within the scret tomb of despair!\nDefeat the enemy's and ge the bonus gold to  get the highest score to win!\nWould you like to begin Yes or No?");
-            annoyPlayer = Console.ReadLine();
-            if(annoyPlayer == "Yes" | annoyPlayer == "yes")
-            {
+           
                 Console.Clear();
                 OnStartUp();
                 while (EnemyCount > 0)
@@ -79,6 +76,7 @@ namespace CaveExplorers2_WillB
                     ShowPlayer();
                     ShowEnemy1();
                     ShowEnemy2();
+                    PlayerPOSMove();
                     if (EnemyOneAlive)
                     {
                         EnemyOnePOSMove();
@@ -89,16 +87,12 @@ namespace CaveExplorers2_WillB
                         EnemytwoPOSMove();
                     }
                     PlayerTurn = true;
-                    PlayerPOSMove();
+                    
 
 
                 }
                 Win();
-            }
-            else
-            {
-                AnnyingThePlayer();
-            }
+            
         }
         static void AnnyingThePlayer()
         {
@@ -420,7 +414,7 @@ namespace CaveExplorers2_WillB
             {
                 Console.SetCursorPosition(EnemyOnePOSX, EnemyOnePOSY);
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("@");
+                Console.WriteLine("G");
                 Console.ResetColor();
             }
             else
@@ -435,7 +429,7 @@ namespace CaveExplorers2_WillB
             {
                 Console.SetCursorPosition(EnemyTwoPOSX, EnemyTwoPOSY);
                 Console.ForegroundColor = ConsoleColor.DarkRed;
-                Console.WriteLine("%");
+                Console.WriteLine("C");
                 Console.ResetColor();
             }
         }//Displays the Enemy2
@@ -663,13 +657,11 @@ namespace CaveExplorers2_WillB
         static void ShowHUD()
         {
             Console.BackgroundColor = ConsoleColor.Black;
-            Console.ForegroundColor = ConsoleColor. Cyan;
-            Console.Write("Player Stats\n|Player Health " + PlayerHealth + "|Player Attack " + PlayerAttack + "|Current Collectables " + PlayerCollectables +"\n");
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write("Enemy1 Stats\n|Enemy1 Health " + EnemyOneHealth + "|Enemy1 Attack " + EnemyOneAttack + "|\n");
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.Write("Enemy2 Stats\n|Enemy2 Health " + EnemyTwoHealth + "|Enemy2 Attack " + EnemyTwoAttack + "|\n");
-            Console.Write(EnemyCount);
+            Console.Write("Player Stats\n|Health:" + PlayerHealth + "    | Attack " + PlayerAttack + "    | Current Collectables " + PlayerCollectables +"\n");
+
+            Console.Write("Grunt Stats\n|Health:" + EnemyOneHealth + "    | Attack " + EnemyOneAttack + "    |\n");
+
+            Console.Write("Chaser Stats\n|Health:" + EnemyTwoHealth + "    | Attack " + EnemyTwoAttack + "    |\n");
             
         }//<-- Shows the players hud
         static void Win()
