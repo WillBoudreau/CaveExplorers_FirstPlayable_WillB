@@ -64,7 +64,7 @@ namespace CaveExplorers2_WillB
         static int Collect5Y;
         static void Main()
         {
-            Console.Write("Welcome brave adventurer! You are a brave explorer tasked with slaying the Enemy's within the scret tomb of despair!\nDefeat the enemy's and get the highest score to win!\nWould you like to begin Yes or No?");
+            Console.Write("Welcome brave adventurer! You are a brave explorer tasked with slaying the Enemy's within the scret tomb of despair!\nDefeat the enemy's and ge the bonus gold to  get the highest score to win!\nWould you like to begin Yes or No?");
             annoyPlayer = Console.ReadLine();
             if(annoyPlayer == "Yes" | annoyPlayer == "yes")
             {
@@ -82,19 +82,13 @@ namespace CaveExplorers2_WillB
                     if (EnemyOneAlive)
                     {
                         EnemyOnePOSMove();
-                    }
-                    else
-                    {
-                        PlayerTurn = true;
+
                     }
                     if (EnemyTwoAlive)
                     {
                         EnemytwoPOSMove();
                     }
-                    else
-                    {
-                        PlayerTurn = true;
-                    }
+                    PlayerTurn = true;
                     PlayerPOSMove();
 
 
@@ -140,7 +134,7 @@ namespace CaveExplorers2_WillB
             // Enemy 2 initialization
             EnemyTwoPOSX = 6;
             EnemyTwoPOSY = 7;
-            EnemyTwoAttack = 3;
+            EnemyTwoAttack = 1;
             EnemyTwoHealth = 6;
             //Game initialization
             EndGame = false;
@@ -188,19 +182,19 @@ namespace CaveExplorers2_WillB
                 {
                     case 'w':
                         PlayerPOS(0,-1);
-                        PlayerTurn = false;
+                        
                         break;
                     case 'a':
                         PlayerPOS(-1,0);
-                        PlayerTurn = false;
+                        
                         break;
                     case 's':
                         PlayerPOS(0,1);
-                        PlayerTurn = false;
+                        
                         break;
                     case 'd':
                         PlayerPOS(1, 0);
-                        PlayerTurn = false;
+                        
                         break;
                 }
 
@@ -210,6 +204,7 @@ namespace CaveExplorers2_WillB
         {
             PlayerPOSX += x;
             PlayerPOSY += y;
+            PlayerTurn = true;
             Combat(x,y);
             switch (IsTileValid(PlayerPOSX, PlayerPOSY))
             {
@@ -226,8 +221,6 @@ namespace CaveExplorers2_WillB
                     CollectCheck(PlayerPOSX,PlayerPOSY);
                     break;
             }
-            
-
         }//<-- Checks the tiles on the map before the player moves on to them
         static int EnemyOneInput()
         { if(EnemyOneAlive == true)
@@ -262,30 +255,26 @@ namespace CaveExplorers2_WillB
         }//<-- Checks where the Enemy1 moves based off of a RNG generator between 1 and 4
         static void EnemyOnePOSMove()
         {
-            if(PlayerTurn == false)
+            switch (EnemyOneInput())
             {
-                PlayerTurn = true;
-                switch (EnemyOneInput())
-                {
-                    case 1:
-                        EnemyOnePOS(0, -1);
-                        
-                        break;
-                    case 2:
-                        EnemyOnePOS(-1, 0);
-                        
-                        break;
-                    case 3:
-                        EnemyOnePOS(0, 1);
-                        
-                        break;
-                    case 4:
-                        EnemyOnePOS(1, 0);
-                        
-                        break;
-                }
+                case 1:
+                    EnemyOnePOS(0, -1);
+
+                    break;
+                case 2:
+                    EnemyOnePOS(-1, 0);
+
+                    break;
+                case 3:
+                    EnemyOnePOS(0, 1);
+
+                    break;
+                case 4:
+                    EnemyOnePOS(1, 0);
+
+                    break;
             }
-            
+
         }//<--Actually moves the Enemy1 based off of the RNG Generator
         static void EnemyOnePOS( int x, int y)
         {
@@ -293,6 +282,7 @@ namespace CaveExplorers2_WillB
             {
                 EnemyOnePOSX += x;
                 EnemyOnePOSY += y;
+                PlayerTurn = false;
                 Combat(x, y);
                 switch (IsTileValid(EnemyOnePOSX, EnemyOnePOSY))
                 {
@@ -314,34 +304,27 @@ namespace CaveExplorers2_WillB
         }//<-- Checks the tiles before the Enemy 1 moves on to them
         static int EnemyTwoInput()
         {
-            if(EnemyTwoAlive == true)
+            if (PlayerPOSY < EnemyTwoPOSY)
             {
-                if (PlayerPOSY < EnemyTwoPOSY)
-                {
-                    return 1;
-                }
-                else if (PlayerPOSX < EnemyTwoPOSX)
-                {
-                    return 2;
-                }
-                else if (PlayerPOSY > EnemyTwoPOSY)
-                {
-                    return 3;
-                }
-                else if (PlayerPOSX > EnemyTwoPOSX)
-                {
-                    return 4;
-                }
-                else
-                {
-                    return 5;
-                }
+                return 1;
+            }
+            else if (PlayerPOSX < EnemyTwoPOSX)
+            {
+                return 2;
+            }
+            else if (PlayerPOSY > EnemyTwoPOSY)
+            {
+                return 3;
+            }
+            else if (PlayerPOSX > EnemyTwoPOSX)
+            {
+                return 4;
             }
             else
             {
-                return 0;
+                return 5;
             }
-            
+
         }//<-- Uses the Players position to determine the Enemy2's position
         static void EnemytwoPOSMove()
         {
@@ -450,7 +433,7 @@ namespace CaveExplorers2_WillB
                 Console.WriteLine("%");
                 Console.ResetColor();
             }
-        }
+        }//Displays the Enemy2
         static void Combat( int x, int y) 
         {
             if(PlayerTurn == true)
@@ -498,10 +481,12 @@ namespace CaveExplorers2_WillB
             }
             else
             {
+                
                 if (PlayerPOSX == EnemyOnePOSX && PlayerPOSY == EnemyOnePOSY)
                 {
-                    PlayerPOSX -= x;
-                    PlayerPOSY -= y;
+
+                    EnemyOnePOSX -= x;
+                    EnemyOnePOSY -= y;
                     PlayerHealth -= EnemyOneAttack;
                     if (PlayerHealth <= 0)
                     {
@@ -512,8 +497,8 @@ namespace CaveExplorers2_WillB
                 }//<-- During Enemy1 turn Player takes damage
                 if (PlayerPOSX == EnemyTwoPOSX && PlayerPOSY == EnemyTwoPOSY)
                 {
-                    PlayerPOSX -= x;
-                    PlayerPOSY -= y;
+                    EnemyTwoPOSX -= x;
+                    EnemyTwoPOSY -= y;
                     PlayerHealth -= EnemyTwoAttack;
                     if (PlayerHealth <= 0)
                     {
