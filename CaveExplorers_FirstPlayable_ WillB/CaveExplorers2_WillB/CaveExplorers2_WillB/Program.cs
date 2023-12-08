@@ -11,6 +11,7 @@ namespace CaveExplorers2_WillB
 {
     internal class Program
     {
+
         //Map Variables
         static string[] MapStr;
         static char[][] MapChar;
@@ -43,7 +44,7 @@ namespace CaveExplorers2_WillB
         static void Main(string[] args)
         {
             OnStartUp();
-            while (EnemyCount >= 0 && CollectMax > PlayerCollectables)
+            while (EnemyCount >= 0 || CollectMax <= PlayerCollectables)
             {
                 
                 MapArray();
