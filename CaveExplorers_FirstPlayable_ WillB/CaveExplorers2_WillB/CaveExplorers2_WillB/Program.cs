@@ -216,6 +216,11 @@ namespace CaveExplorers2_WillB
                     break;
                 case '+':
                     PlayerHealth -= 1;
+                    if(PlayerHealth <= 0)
+                    {
+                        PlayerHealth = 0;
+                        GameOver();
+                    }
                     break;
                 case '*':
                     CollectCheck(PlayerPOSX,PlayerPOSY);
@@ -540,6 +545,7 @@ namespace CaveExplorers2_WillB
             Console.Write("Game Over");
             Console.Write("Press any key to quit");
             Console.ReadKey();
+            Environment.Exit(1);
         }//<-- Whne the player dies, game ends 
         static void MapArray()
         {
