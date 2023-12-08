@@ -24,16 +24,17 @@ namespace CaveExplorers2_WillB
         static int PlayerAttack;
         //Map variables
         //Enemy 1 Variables
-        static int Enemy1Health;
-        static int Enemy1Attack;
-        static int Enemy1POSX;
-        static int Enemy1POSY;
-        static bool Enemy1Alive;
+        static int EnemyOneHealth;
+        static int EnemyOneAttack;
+        static int EnemyOnePOSX;
+        static int EnemyOnePOSY;
+        static bool EnemyOneAlive;
         //Enemy 2 Variables
-        static int Enemy2Health;
-        static int Enemy2Attack;
-        static int Enemy2POSX;
-        static int Enemy2POSY;
+        static int EnemyTwoHealth;
+        static int EnemyTwoAttack;
+        static int EnemyTwoPOSX;
+        static int EnemyTwoPOSY;
+        static bool EnemyTwoAlive;
         //Random Number Selec
         static Random rnd = new Random();
         //Game
@@ -65,12 +66,22 @@ namespace CaveExplorers2_WillB
             {
                 
                 MapArray();
+                Console.Write("\n");
                 ShowHUD();
                 ShowPlayer();
                 ShowEnemy1();
-                if (Enemy1Alive)
+                ShowEnemy2();
+                if (EnemyOneAlive)
                 {
-                    Enemy1POSMove();
+                    EnemyOnePOSMove();
+                }
+                else
+                {
+                    PlayerTurn = true;
+                }
+                if(EnemyTwoAlive)
+                {
+                    EnemytwoPOSMove();
                 }
                 else
                 {
@@ -91,19 +102,19 @@ namespace CaveExplorers2_WillB
             PlayerCollectables = 0;
             PlayerAttack = 3;
             //Enemy 1 initialization
-            Enemy1POSX = 15;
-            Enemy1POSY = 15;
-            Enemy1Health = 3;
-            Enemy1Attack = 1;
+            EnemyOnePOSX = 15;
+            EnemyOnePOSY = 15;
+            EnemyOneHealth = 3;
+            EnemyOneAttack = 1;
             // Enemy 2 initialization
-            Enemy2POSX = 6;
-            Enemy2POSY = 6;
-            Enemy2Attack = 3;
-            Enemy2Health = 1;
+            EnemyTwoPOSX = 6;
+            EnemyTwoPOSY = 6;
+            EnemyTwoAttack = 3;
+            EnemyTwoHealth = 1;
             //Game initialization
             EndGame = false;
             PlayerTurn = true;
-            Enemy1Alive = true;
+            EnemyOneAlive = true;
             EnemyCount = 1;
             CollectMax = 5;
             //Collectables
@@ -180,14 +191,14 @@ namespace CaveExplorers2_WillB
                     PlayerHealth -= 1;
                     break;
                 case '*':
-                    CollectCheck(x,y);
+                    CollectCheck(PlayerPOSX,PlayerPOSY);
                     break;
             }
             
 
         }//<-- Checks the tiles on the map before the player moves on to them
-        static int Enemy1Input()
-        { if(Enemy1Alive == true)
+        static int EnemyOneInput()
+        { if(EnemyOneAlive == true)
             {
                 int Move = rnd.Next(1, 5);
                 if (Move == 1)
@@ -217,51 +228,51 @@ namespace CaveExplorers2_WillB
             }
             
         }//<-- Checks where the Enemy1 moves based off of a RNG generator between 1 and 4
-        static void Enemy1POSMove()
+        static void EnemyOnePOSMove()
         {
             if(PlayerTurn == false)
             {
                 PlayerTurn = true;
-                switch (Enemy1Input())
+                switch (EnemyOneInput())
                 {
                     case 1:
-                        Enemy1POS(0, -1);
+                        EnemyOnePOS(0, -1);
                         
                         break;
                     case 2:
-                        Enemy1POS(-1, 0);
+                        EnemyOnePOS(-1, 0);
                         
                         break;
                     case 3:
-                        Enemy1POS(0, 1);
+                        EnemyOnePOS(0, 1);
                         
                         break;
                     case 4:
-                        Enemy1POS(1, 0);
+                        EnemyOnePOS(1, 0);
                         
                         break;
                 }
             }
             
         }//<--Actually moves the Enemy1 based off of the RNG Generator
-        static void Enemy1POS( int x, int y)
+        static void EnemyOnePOS( int x, int y)
         {
-            if(Enemy1Health > 0)
+            if(EnemyOneHealth > 0)
             {
-                Enemy1POSX += x;
-                Enemy1POSY += y;
+                EnemyOnePOSX += x;
+                EnemyOnePOSY += y;
                 Combat(x, y);
-                switch (IsTileValid(Enemy1POSX, Enemy1POSY))
+                switch (IsTileValid(EnemyOnePOSX, EnemyOnePOSY))
                 {
                     case '.':
                         break;
                     case '#':
-                        Enemy1POSX -= x;
-                        Enemy1POSY -= y;
+                        EnemyOnePOSX -= x;
+                        EnemyOnePOSY -= y;
                         break;
                     case '+':
-                        Enemy1POSX -= x;
-                        Enemy1POSY -= y;
+                        EnemyOnePOSX -= x;
+                        EnemyOnePOSY -= y;
                         break;
                     case '*':
                         break;
@@ -269,10 +280,85 @@ namespace CaveExplorers2_WillB
             }
             
         }//<-- Checks the tiles before the Enemy 1 moves on to them
-        //static int Enemy2Input()
-        //{
-
-        //}
+        static int EnemyTwoInput()
+        {
+            if (PlayerPOSY < EnemyTwoPOSY)
+            {
+                return 1;
+            }
+            else if (PlayerPOSX < EnemyTwoPOSX)
+            {
+                return 2;
+            }
+            else if(PlayerPOSY > EnemyTwoPOSY) 
+            { 
+                return 3;
+            }
+            else if(PlayerPOSX > EnemyTwoPOSX)
+            {
+                return 4;
+            }
+            else
+            {
+                return 5;
+            }
+        }
+        static void EnemytwoPOSMove()
+        {
+            switch(EnemyTwoInput())
+            {
+                case 0:
+                    break;
+                case 1:
+                    if (IsTileValid(EnemyTwoPOSX, (EnemyTwoPOSY - 1)) == '.')
+                    {
+                        EnemyTwoPOSY = EnemyTwoPOSY - 1;
+                    }
+                    break;
+                case 2:
+                    if (IsTileValid(EnemyTwoPOSX, (EnemyTwoPOSY - 1)) == '.')
+                    {
+                        EnemyTwoPOSX = EnemyTwoPOSX - 1;
+                    }
+                    break;
+                case 3:
+                    if(IsTileValid(EnemyTwoPOSX,(EnemyTwoPOSY - 1)) ==  '.')
+                    {
+                        EnemyTwoPOSY = EnemyTwoPOSY + 1;
+                    }
+                    break;
+                case 4:
+                    if(IsTileValid(EnemyTwoPOSX,(EnemyTwoPOSY - 1)) == '.')
+                    {
+                        EnemyTwoPOSX =EnemyTwoPOSX + 1;
+                    }
+                    break;
+            }
+        }
+        static void EnemyTwoPOS(int x,int y)
+        {
+            if (EnemyTwoHealth > 0)
+            {
+                EnemyTwoPOSX += x;
+                EnemyTwoPOSY += y;
+                Combat(x, y);
+                switch (IsTileValid(EnemyTwoPOSX, EnemyTwoPOSY))
+                {
+                    case '.':
+                        break;
+                    case '#':
+                        EnemyTwoPOSX -= x;
+                        EnemyTwoPOSY -= y;
+                        break;
+                    case '+':
+                        EnemyTwoPOSX -= x;
+                        EnemyTwoPOSY -= y;
+                        break;
+                    case '*':
+                        break;
+                }
+            }
+        }
         static char IsTileValid(int x, int y)// <-- Simply checks the tiles
         {
             return MapChar[y][x];
@@ -286,9 +372,9 @@ namespace CaveExplorers2_WillB
         }//<-- Shows the player on the map
         static void ShowEnemy1()
         {
-            if(Enemy1Alive == true)
+            if(EnemyOneAlive == true)
             {
-                Console.SetCursorPosition(Enemy1POSX, Enemy1POSY);
+                Console.SetCursorPosition(EnemyOnePOSX, EnemyOnePOSY);
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("@");
                 Console.ResetColor();
@@ -299,40 +385,50 @@ namespace CaveExplorers2_WillB
             }
             
         }//<-- Shows off the Enemy on the map
+        static void ShowEnemy2()
+        {
+            if (EnemyTwoAlive)
+            {
+                Console.SetCursorPosition(EnemyTwoPOSX, EnemyTwoPOSY);
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.WriteLine("%");
+                Console.ResetColor();
+            }
+        }
         static void Combat( int x, int y) 
         {
             if(PlayerTurn == true)
             { 
-                if (PlayerPOSX == Enemy1POSX && PlayerPOSY == Enemy1POSY)
+                if (PlayerPOSX == EnemyOnePOSX && PlayerPOSY == EnemyOnePOSY)
                 {
                    
-                    Enemy1Health -= PlayerAttack;
-                    if (Enemy1Health <= 0)
+                    EnemyOneHealth -= PlayerAttack;
+                    if (EnemyOneHealth <= 0)
                     {
                         
-                        Enemy1Health = 0;
-                        Enemy1Alive = false;
-                        Enemy1POSX = 0;
-                        Enemy1POSY = 0;
+                        EnemyOneHealth = 0;
+                        EnemyOneAlive = false;
+                        EnemyOnePOSX = 0;
+                        EnemyOnePOSY = 0;
                         EnemyCount--;
                         
                     }
 
                 }
-                if(PlayerPOSX == Enemy2POSX && PlayerPOSY == Enemy2POSY) 
+                if(PlayerPOSX == EnemyOnePOSX && PlayerPOSY == EnemyOnePOSY) 
                 { 
-                    Enemy2Health -= PlayerAttack;
-                    if(Enemy2Health <= 0)
+                    EnemyTwoHealth -= PlayerAttack;
+                    if(EnemyTwoHealth <= 0)
                     {
-                        Enemy2Health = 0;
+                        EnemyTwoHealth = 0;
                     }
                 }
-                if (PlayerPOSX == Enemy1POSX && PlayerPOSY == Enemy1POSY)
+                if (PlayerPOSX == EnemyOnePOSX && PlayerPOSY == EnemyOnePOSY)
                 {
                     PlayerPOSX -= x;
                     PlayerPOSY -= y;
                 }
-                else if (PlayerPOSX == Enemy2POSX && PlayerPOSY == Enemy2POSY)
+                else if (PlayerPOSX == EnemyOnePOSX && PlayerPOSY == EnemyOnePOSY)
                 {
                     PlayerPOSX -= x;
                     PlayerPOSY -= y;
@@ -341,18 +437,18 @@ namespace CaveExplorers2_WillB
             }
             else
             {
-                if(Enemy1POSX == PlayerPOSX && Enemy1POSY == PlayerPOSY)
+                if(EnemyOnePOSX == PlayerPOSX && EnemyOnePOSY == PlayerPOSY)
                 {
-                    PlayerHealth -= Enemy1Attack;
+                    PlayerHealth -= EnemyOneAttack;
                     if(PlayerHealth <= 0)
                     {
                         PlayerHealth = 0;
                         GameOver();
                     }
                 }
-                if(PlayerPOSX == Enemy2POSX &&  Enemy2POSY == PlayerPOSY)
+                if(PlayerPOSX == EnemyTwoPOSX && EnemyTwoPOSY == EnemyOnePOSY)
                 { 
-                    PlayerHealth -= Enemy2Attack;
+                    PlayerHealth -= EnemyTwoAttack;
                     if(PlayerHealth <= 0)
                     {
                         PlayerHealth = 0;
@@ -382,51 +478,66 @@ namespace CaveExplorers2_WillB
             for (int k = 0; k < Mapy; k++)
             {
                 MapChar[k] = MapStr[k].ToCharArray();
-                if(Collect1 == false)
-                {
-                    MapChar[Collect1Y][Collect1X] = '.';
+
+                //foreach (char c in MapChar[k])
+                //{
+
+                        //    }
+                        //}
+                        //Console.Write('\n');
                 }
-                if (Collect2 == false)
+            if (Collect1 == false)
+            {
+                MapChar[Collect1Y][Collect1X] = '.';
+            }
+            if (Collect2 == false)
+            {
+                MapChar[Collect2Y][Collect2X] = '.';
+            }
+            if (Collect3 == false)
+            {
+                MapChar[Collect3Y][Collect3X] = '.';
+            }
+            if (Collect4 == false)
+            {
+                MapChar[Collect4Y][Collect4X] = '.';
+            }
+            if (Collect5 == false)
+            {
+                MapChar[Collect5Y][Collect5X] = '.';
+            }
+            DisplayMap();
+        }// <---Prints out the map 
+        static void DisplayMap()
+        {
+            for( int i = 0; i < MapChar.Length; i++ )
+            {
+                for(int k= 0; k < MapChar[i].Length; k++ )
                 {
-                    MapChar[Collect2Y][Collect2X] = '.';
-                }
-                if(Collect3 == false)
-                {
-                    MapChar[Collect3Y][Collect3X] = '.';
-                }
-                if (Collect4 == false)
-                {
-                    MapChar[Collect4Y][Collect4X] = '.';
-                }
-                if(Collect5 == false)
-                {
-                    MapChar[Collect5Y][Collect5X] = '.';
-                }
-                foreach (char c in MapChar[k])
-                {
-                    switch (c)
+                    Console.SetCursorPosition(k, i);
+                    switch (MapChar[i][k])
                     {
                         case '#':
                             Console.BackgroundColor = ConsoleColor.Gray;
-                            Console.Write(c);
+                            Console.Write(MapChar[i][k]);
                             break;
                         case '+':
                             Console.BackgroundColor = ConsoleColor.Red;
-                            Console.Write(c);
+                            Console.WriteLine(MapChar[i][k]);                            
                             break;
                         case '.':
                             Console.BackgroundColor = ConsoleColor.DarkGreen;
-                            Console.Write(c);
+                            Console.Write(MapChar[i][k]);
                             break;
                         case '*':
                             Console.BackgroundColor = ConsoleColor.Yellow;
-                            Console.Write(c);
+                            Console.Write(MapChar[i][k]); 
                             break;
                     }
+                           
                 }
-                Console.Write('\n');
             }
-        }// <---Prints out the map 
+        }//<-- Displays the Map to the player
         static void CollectCheck( int x, int y)
         {
             switch (PlayerCollectables)
@@ -462,16 +573,16 @@ namespace CaveExplorers2_WillB
                     PlayerCollectables = PlayerCollectables + 1;
                     break;
             }
-        }
+        }//<--Check to see if the player is on a gold slot
         static void ShowHUD()
         {
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor. Cyan;
             Console.Write("Player Stats\n|Player Health " + PlayerHealth + "|Player Attack " + PlayerAttack + "|Current Collectables " + PlayerCollectables +"\n");
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write("Enemy1 Stats\n|Enemy1 Health " + Enemy1Health + "|Enemy1 Attack " + Enemy1Attack + "|\n");
+            Console.Write("Enemy1 Stats\n|Enemy1 Health " + EnemyOneHealth + "|Enemy1 Attack " + EnemyOneAttack + "|\n");
             Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.Write("Enemy2 Stats\n|Enemy2 Health " + Enemy2Health + "|Enemy2 Attack " + Enemy2Attack + "|");
+            Console.Write("Enemy2 Stats\n|Enemy2 Health " + EnemyTwoHealth + "|Enemy2 Attack " + EnemyTwoAttack + "|");
             
         }//<-- Shows the players hud
         static void Win()
