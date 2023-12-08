@@ -38,10 +38,12 @@ namespace CaveExplorers2_WillB
         //Game
         static bool EndGame;
         static bool PlayerTurn;
+        static int EnemyCount;
+        static int CollectMax;
         static void Main(string[] args)
         {
             OnStartUp();
-            while (true)
+            while (EnemyCount >= 0 && CollectMax > PlayerCollectables)
             {
                 
                 MapArray();
@@ -77,6 +79,8 @@ namespace CaveExplorers2_WillB
             EndGame = false;
             PlayerTurn = true;
             Enemy1Alive = true;
+            EnemyCount = 1;
+            CollectMax = 5;
         }//<--Set up the starting variables
         static char PlayerInput()
         {
@@ -132,7 +136,7 @@ namespace CaveExplorers2_WillB
         {
             PlayerPOSX += x;
             PlayerPOSY += y;
-            Combat();
+            Combat(x,y);
             switch (IsTileValid(PlayerPOSX, PlayerPOSY))
             {
                 case '.':
@@ -148,16 +152,7 @@ namespace CaveExplorers2_WillB
                     PlayerCollectables += 1;
                     break;
             }
-            if(PlayerPOSX == Enemy1POSX &&  PlayerPOSY == Enemy1POSY)
-            {
-                PlayerPOSX -= x;
-                PlayerPOSY -= y;
-            }
-            if(PlayerPOSX == Enemy2POSX && PlayerPOSY == Enemy2POSY)
-            {
-                PlayerPOSX -= x; 
-                PlayerPOSY -= y;
-            }
+            
 
         }//<-- Checks the tiles on the map before the player moves on to them
         static int Enemy1Input()
@@ -271,7 +266,7 @@ namespace CaveExplorers2_WillB
             }
             
         }//<-- Shows off the Enemy on the map
-        static void Combat() 
+        static void Combat( int x, int y) 
         {
             if(PlayerTurn == true)
             { 
@@ -281,11 +276,12 @@ namespace CaveExplorers2_WillB
                     Enemy1Health -= PlayerAttack;
                     if (Enemy1Health <= 0)
                     {
-                        Enemy1Alive = false;
+                        
                         Enemy1Health = 0;
                         Enemy1POSX = 0;
                         Enemy1POSY = 0;
-                        PlayerTurn = true;
+                        EnemyCount--;
+                        
                     }
 
                 }
@@ -296,6 +292,16 @@ namespace CaveExplorers2_WillB
                     {
                         Enemy2Health = 0;
                     }
+                }
+                if (PlayerPOSX == Enemy1POSX && PlayerPOSY == Enemy1POSY)
+                {
+                    PlayerPOSX -= x;
+                    PlayerPOSY -= y;
+                }
+                else if (PlayerPOSX == Enemy2POSX && PlayerPOSY == Enemy2POSY)
+                {
+                    PlayerPOSX -= x;
+                    PlayerPOSY -= y;
                 }
 
             }
@@ -329,8 +335,7 @@ namespace CaveExplorers2_WillB
             Console.Write("Game Over");
             Console.Write("Press any key to quit");
             Console.ReadKey();
-        }//<-- Whne the player dies, game ends
-        static void 
+        }//<-- Whne the player dies, game ends 
         static void MapArray()
         {
             Console.SetCursorPosition(0, 0);
@@ -379,5 +384,9 @@ namespace CaveExplorers2_WillB
             Console.Write("Enemy2 Stats\n|Enemy2 Health " + Enemy2Health + "|Enemy2 Attack " + Enemy2Attack + "|");
             
         }//<-- Shows the players hud
+        static void Win()
+        {
+
+        }
     }
 }
