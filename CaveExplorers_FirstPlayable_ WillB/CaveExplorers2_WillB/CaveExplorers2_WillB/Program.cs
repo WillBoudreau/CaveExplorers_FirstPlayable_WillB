@@ -45,6 +45,7 @@ namespace CaveExplorers2_WillB
         static int CollectMax;
         static bool Collactables;
         static float score;
+        static string annoyPlayer;
         //Collectables
         static bool Collect1;
         static int Collect1X;
@@ -61,42 +62,67 @@ namespace CaveExplorers2_WillB
         static bool Collect5;
         static int Collect5X;
         static int Collect5Y;
-        static void Main(string[] args)
+        static void Main()
         {
-            Console.Write("Welcome brave adventurer! You are a brave explorer tasked with slaying the Enemy's within the scret tomb of despair!");
-
-            OnStartUp();
-            while (EnemyCount > 0)
+            Console.Write("Welcome brave adventurer! You are a brave explorer tasked with slaying the Enemy's within the scret tomb of despair!\nDefeat the enemy's and get the highest score to win!\nWould you like to begin Yes or No?");
+            annoyPlayer = Console.ReadLine();
+            if(annoyPlayer == "Yes" | annoyPlayer == "yes")
             {
-                
-                MapArray();
-                Console.Write("\n");
-                ShowHUD();
-                ShowPlayer();
-                ShowEnemy1();
-                ShowEnemy2();
-                if (EnemyOneAlive)
+                Console.Clear();
+                OnStartUp();
+                while (EnemyCount > 0)
                 {
-                    EnemyOnePOSMove();
+
+                    MapArray();
+                    Console.Write("\n");
+                    ShowHUD();
+                    ShowPlayer();
+                    ShowEnemy1();
+                    ShowEnemy2();
+                    if (EnemyOneAlive)
+                    {
+                        EnemyOnePOSMove();
+                    }
+                    else
+                    {
+                        PlayerTurn = true;
+                    }
+                    if (EnemyTwoAlive)
+                    {
+                        EnemytwoPOSMove();
+                    }
+                    else
+                    {
+                        PlayerTurn = true;
+                    }
+                    PlayerPOSMove();
+
+
                 }
-                else
-                {
-                    PlayerTurn = true;
-                }
-                if(EnemyTwoAlive)
-                {
-                    EnemytwoPOSMove();
-                }
-                else
-                {
-                    PlayerTurn = true;
-                }
-                PlayerPOSMove();
-                
+                Win();
+            }
+            else
+            {
+                AnnyingThePlayer();
+            }
+        }
+        static void AnnyingThePlayer()
+        {
+            Console.WriteLine("Are you sure?");
+            annoyPlayer = Console.ReadLine();
+            if (annoyPlayer == "Yes" | annoyPlayer == "yes")
+            {
+                AnnyingThePlayer();
+            }
+            else
+            {   Console.Clear();
+                Console.WriteLine("Alright then lets start, this time from the beginning...");
+                Main();
 
             }
-            Win();
-        }
+
+        }//<-- Annoys the player into starting the game
+            
         static void OnStartUp()
         {
             Console.CursorVisible = false;
@@ -316,7 +342,7 @@ namespace CaveExplorers2_WillB
                 return 0;
             }
             
-        }
+        }//<-- Uses the Players position to determine the Enemy2's position
         static void EnemytwoPOSMove()
         {
             switch(EnemyTwoInput())
@@ -364,8 +390,8 @@ namespace CaveExplorers2_WillB
             //        EnemyTwoPOSX = EnemyTwoPOSX + 1;
             //    }
             //    break;
-        }
-        static void EnemyTwoPOS(int x,int y)//<--Here
+        }//<-- Moves the Enemy2
+        static void EnemyTwoPOS(int x,int y)
         {
             if (EnemyTwoHealth > 0)
             {
@@ -388,7 +414,7 @@ namespace CaveExplorers2_WillB
                         break;
                 }
             }
-        }
+        }//<-- Checks Enemy2's position
         static char IsTileValid(int x, int y)// <-- Simply checks the tiles
         {
             return MapChar[y][x];
@@ -474,19 +500,20 @@ namespace CaveExplorers2_WillB
             {
                 if (PlayerPOSX == EnemyOnePOSX && PlayerPOSY == EnemyOnePOSY)
                 {
-
+                    PlayerPOSX -= x;
+                    PlayerPOSY -= y;
                     PlayerHealth -= EnemyOneAttack;
                     if (PlayerHealth <= 0)
                     {
-
                         PlayerHealth = 0;
                         GameOver();
-
                     }
 
                 }//<-- During Enemy1 turn Player takes damage
                 if (PlayerPOSX == EnemyTwoPOSX && PlayerPOSY == EnemyTwoPOSY)
                 {
+                    PlayerPOSX -= x;
+                    PlayerPOSY -= y;
                     PlayerHealth -= EnemyTwoAttack;
                     if (PlayerHealth <= 0)
                     {
