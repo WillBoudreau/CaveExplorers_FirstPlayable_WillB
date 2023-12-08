@@ -444,7 +444,7 @@ namespace CaveExplorers2_WillB
                         score++;
                     }
 
-                }
+                }//<-- During the players trun Enemy 1 takes damage
                 if(PlayerPOSX == EnemyTwoPOSX && PlayerPOSY == EnemyTwoPOSY) 
                 { 
                     EnemyTwoHealth -= PlayerAttack;
@@ -457,17 +457,17 @@ namespace CaveExplorers2_WillB
                         EnemyCount--;
                         score++;
                     }
-                }
+                }//<-- During the players turn Enemy 2 takes damage
                 if (PlayerPOSX == EnemyOnePOSX && PlayerPOSY == EnemyOnePOSY)
                 {
                     PlayerPOSX -= x;
                     PlayerPOSY -= y;
-                }
-                else if (PlayerPOSX == EnemyOnePOSX && PlayerPOSY == EnemyOnePOSY)
+                }//<-- Player cannot move on top of Enemy 1
+                else if (PlayerPOSX == EnemyTwoPOSX && PlayerPOSY == EnemyTwoPOSY)
                 {
                     PlayerPOSX -= x;
                     PlayerPOSY -= y;
-                }
+                }//<-- Player cannot move on top of Enemy 2
 
             }
             else
@@ -484,7 +484,7 @@ namespace CaveExplorers2_WillB
 
                     }
 
-                }
+                }//<-- During Enemy1 turn Player takes damage
                 if (PlayerPOSX == EnemyTwoPOSX && PlayerPOSY == EnemyTwoPOSY)
                 {
                     PlayerHealth -= EnemyTwoAttack;
@@ -493,7 +493,13 @@ namespace CaveExplorers2_WillB
                         PlayerHealth = 0;
                         GameOver();
                     }
-                }
+                }//<--During Enemy2 turn Player takes damage
+
+
+
+
+
+
                 //if(EnemyOnePOSX == PlayerPOSX && EnemyOnePOSY == PlayerPOSY)
                 //{
                 //    PlayerHealth -= EnemyOneAttack;
