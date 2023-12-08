@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34221.43
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CaveExplorers2_WillB", "CaveExplorers2_WillB\CaveExplorers2_WillB.csproj", "{165DFDED-95F2-447F-ABA9-5F96F34B4977}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{802010D8-BBE5-40F3-8EDF-0E139B4D1AA3}"
+	ProjectSection(SolutionItems) = preProject
+		TextRPGMap.txt = TextRPGMap.txt
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CaveExplorers_FirstPlayable_ WillB", "..\..\CaveExplorers_FirstPlayable_WillB\CaveExplorers_FirstPlayable_ WillB\CaveExplorers_FirstPlayable_ WillB\CaveExplorers_FirstPlayable_ WillB.csproj", "{AF2751F3-A58D-4852-B6FE-78D712D0A9B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextBasedRPG__WillB", "..\TextBasedRPG__WillB\TextBasedRPG__WillB\TextBasedRPG__WillB.csproj", "{0D5F8BAA-239E-46A1-8F0F-B2B3DF049710}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{165DFDED-95F2-447F-ABA9-5F96F34B4977}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{165DFDED-95F2-447F-ABA9-5F96F34B4977}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{165DFDED-95F2-447F-ABA9-5F96F34B4977}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{165DFDED-95F2-447F-ABA9-5F96F34B4977}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF2751F3-A58D-4852-B6FE-78D712D0A9B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF2751F3-A58D-4852-B6FE-78D712D0A9B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF2751F3-A58D-4852-B6FE-78D712D0A9B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF2751F3-A58D-4852-B6FE-78D712D0A9B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D5F8BAA-239E-46A1-8F0F-B2B3DF049710}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D5F8BAA-239E-46A1-8F0F-B2B3DF049710}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D5F8BAA-239E-46A1-8F0F-B2B3DF049710}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D5F8BAA-239E-46A1-8F0F-B2B3DF049710}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FF0521F6-EA22-4051-9EFD-FD6C74739265}
+	EndGlobalSection
+EndGlobal
